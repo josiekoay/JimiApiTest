@@ -1,1 +1,931 @@
-[]
+[
+    {
+        "id": "ea2f08adbfccf0be",
+        "type": "tab",
+        "label": "Flow 1",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "42637607a25c574a",
+        "type": "tab",
+        "label": "Testing",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "5ac5e33ce5fac4b0",
+        "type": "inject",
+        "z": "42637607a25c574a",
+        "name": "",
+        "props": [
+            {
+                "p": "timestamp",
+                "v": "",
+                "vt": "date"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            },
+            {
+                "p": "access_token",
+                "v": "access_token",
+                "vt": "global"
+            }
+        ],
+        "repeat": "",
+        "crontab": "00 12 * * *",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "x": 110,
+        "y": 440,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "769c8922f5a4466b",
+        "type": "function",
+        "z": "42637607a25c574a",
+        "name": "Convert DateTime Format",
+        "func": "msg.payload = {}; \nvar date = new Date(msg.timestamp)\n\nvar dateString = date.toISOString().slice(0, 10);\nvar timeString = date.toISOString().slice(11, 19);\n\nmsg.payload.timestamp = dateString + ' ' + timeString;\nnode.status({ text: msg.payload.timestamp });\n\nreturn msg;\n\n",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 350,
+        "y": 440,
+        "wires": [
+            [
+                "38df89a75be45ffa"
+            ]
+        ]
+    },
+    {
+        "id": "38df89a75be45ffa",
+        "type": "template",
+        "z": "42637607a25c574a",
+        "name": "Design AT4 API Payload",
+        "field": "payload",
+        "fieldType": "msg",
+        "format": "json",
+        "syntax": "mustache",
+        "template": "{\n    \"method\": \"jimi.user.device.location.list\",\n    \"timestamp\": \"{{payload.timestamp}}\",\n    \"app_key\": \"8FB345B8693CCD00CF8B69A915590CF7\",\n    \"sign\": \"null\",\n    \"sign_method\": \"md5\",\n    \"v\": \"1.0\",\n    \"format\": \"json\",\n    \"access_token\": \"{{access_token}}\",\n    \"target\": \"Macrovention\"\n}",
+        "output": "json",
+        "x": 610,
+        "y": 440,
+        "wires": [
+            [
+                "87f0ea493b3c3363"
+            ]
+        ]
+    },
+    {
+        "id": "485e81668bc85070",
+        "type": "http request",
+        "z": "42637607a25c574a",
+        "name": "send api request to jimi endpoint",
+        "method": "GET",
+        "ret": "obj",
+        "paytoqs": "query",
+        "url": "https://hk-open.tracksolidpro.com/route/rest",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "insecureHTTPParser": false,
+        "authType": "",
+        "senderr": false,
+        "headers": [],
+        "x": 590,
+        "y": 520,
+        "wires": [
+            [
+                "79c0393de5d87607"
+            ]
+        ]
+    },
+    {
+        "id": "331930c40489c7f3",
+        "type": "function",
+        "z": "42637607a25c574a",
+        "name": "merge func",
+        "func": "var hashed_md5 = msg.md5;\n\nmsg.payload.sign = hashed_md5;\n\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 370,
+        "y": 520,
+        "wires": [
+            [
+                "485e81668bc85070"
+            ]
+        ]
+    },
+    {
+        "id": "4b657658418e1c5d",
+        "type": "change",
+        "z": "42637607a25c574a",
+        "name": "global access token",
+        "rules": [
+            {
+                "t": "set",
+                "p": "access_token",
+                "pt": "global",
+                "to": "payload.result.accessToken",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 150,
+        "y": 740,
+        "wires": [
+            [
+                "f238c25085706b60"
+            ]
+        ]
+    },
+    {
+        "id": "f238c25085706b60",
+        "type": "function",
+        "z": "42637607a25c574a",
+        "name": "create new access token",
+        "func": "node.warn(\"New Access Token is created.\");\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 450,
+        "y": 740,
+        "wires": [
+            [
+                "f7ee000bfd6c94ec",
+                "cbbaf64d758e2c83"
+            ]
+        ]
+    },
+    {
+        "id": "f7ee000bfd6c94ec",
+        "type": "debug",
+        "z": "42637607a25c574a",
+        "name": "debug 8",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 660,
+        "y": 740,
+        "wires": []
+    },
+    {
+        "id": "87f0ea493b3c3363",
+        "type": "template",
+        "z": "42637607a25c574a",
+        "name": "create hashstring",
+        "field": "hashstring",
+        "fieldType": "msg",
+        "format": "handlebars",
+        "syntax": "mustache",
+        "template": "ee7641ab15aa4db28f1a4fde46fe80f1access_token{{payload.access_token}}app_key{{payload.app_key}}format{{payload.format}}method{{payload.method}}sign_method{{payload.sign_method}}target{{payload.target}}timestamp{{payload.timestamp}}v{{payload.v}}ee7641ab15aa4db28f1a4fde46fe80f1",
+        "output": "str",
+        "x": 850,
+        "y": 440,
+        "wires": [
+            [
+                "552f7880539df333"
+            ]
+        ]
+    },
+    {
+        "id": "b4a6aa3685ceb744",
+        "type": "function",
+        "z": "42637607a25c574a",
+        "name": "illegal token",
+        "func": "node.warn(\"Illegal token\")\nmsg.payload = new Date()\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 130,
+        "y": 1020,
+        "wires": [
+            [
+                "c8edad684b16d2af"
+            ]
+        ]
+    },
+    {
+        "id": "cbbaf64d758e2c83",
+        "type": "switch",
+        "z": "42637607a25c574a",
+        "name": "",
+        "property": "payload.message",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "eq",
+                "v": "success",
+                "vt": "str"
+            },
+            {
+                "t": "neq",
+                "v": "sucess",
+                "vt": "str"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 2,
+        "x": 110,
+        "y": 820,
+        "wires": [
+            [
+                "3d14449f7190ada3"
+            ],
+            []
+        ]
+    },
+    {
+        "id": "3d14449f7190ada3",
+        "type": "function",
+        "z": "42637607a25c574a",
+        "name": "get result",
+        "func": "if (msg.payload.message == \"success\") {\n\n    if (msg.payload.result == null) {\n\n        msg.payload = \"There are no data within 1 month\";\n        msg.nodata = true;\n\n    } else {\n\n        msg.nodata = false;\n        msg.payload = msg.payload.result; // Get all results\n\n    }\n\n}\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 300,
+        "y": 820,
+        "wires": [
+            [
+                "0ce18f28ba5b1bb5"
+            ]
+        ]
+    },
+    {
+        "id": "0ce18f28ba5b1bb5",
+        "type": "debug",
+        "z": "42637607a25c574a",
+        "name": "debug 10",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 460,
+        "y": 820,
+        "wires": []
+    },
+    {
+        "id": "c8edad684b16d2af",
+        "type": "function",
+        "z": "42637607a25c574a",
+        "name": "convert DT format",
+        "func": "var date = msg.payload\nvar msiadate = new Date(date)\n\nvar dateonly = msiadate.toISOString().slice(0, 10);\nvar timeonly = msiadate.toISOString().slice(11, 19);\n\nmsg.payload = String(dateonly) + \" \" + String(timeonly)\nnode.status({ text: msg.payload });\n\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 350,
+        "y": 1020,
+        "wires": [
+            [
+                "deb5217216a3861a"
+            ]
+        ]
+    },
+    {
+        "id": "deb5217216a3861a",
+        "type": "template",
+        "z": "42637607a25c574a",
+        "name": "design api payload",
+        "field": "payload",
+        "fieldType": "msg",
+        "format": "handlebars",
+        "syntax": "mustache",
+        "template": "{\n    \"app_key\": \"8FB345B8693CCD00CF8B69A915590CF7\",\n    \"expires_in\":\"7200\",\n    \"format\":\"json\",\n    \"method\": \"jimi.oauth.token.get\",\n    \"sign\":\"null\",\n    \"sign_method\":\"md5\",\n    \"timestamp\": \"{{payload}}\",\n    \"user_id\":\"Macrovention\",\n    \"user_pwd_md5\":\"c5e9b9e61e52bf93ce4355f3b9254d0c\",\n    \"v\": \"1.0\"\n    \n}\n\n    \n    ",
+        "output": "str",
+        "x": 550,
+        "y": 1020,
+        "wires": [
+            [
+                "ab907c6ec7bc047d"
+            ]
+        ]
+    },
+    {
+        "id": "ab907c6ec7bc047d",
+        "type": "template",
+        "z": "42637607a25c574a",
+        "name": "create hashstring",
+        "field": "hashstring",
+        "fieldType": "msg",
+        "format": "handlebars",
+        "syntax": "mustache",
+        "template": "ee7641ab15aa4db28f1a4fde46fe80f1app_key{{payload.app_key}}expires_in{{payload.expires_in}}format{{payload.format}}method{{payload.method}}sign_method{{payload.sign_method}}timestamp{{payload.timestamp}}user_id{{payload.user_id}}user_pwd_md5{{payload.user_pwd_md5}}v{{payload.v}}ee7641ab15aa4db28f1a4fde46fe80f1",
+        "output": "str",
+        "x": 770,
+        "y": 1020,
+        "wires": [
+            [
+                "aa4e3e49626940a1"
+            ]
+        ]
+    },
+    {
+        "id": "12318c6714567b37",
+        "type": "function",
+        "z": "42637607a25c574a",
+        "name": "function 5",
+        "func": "var hashed_md5 = msg.md5;\n\nmsg.payload.sign = hashed_md5;\n\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 300,
+        "y": 1100,
+        "wires": [
+            [
+                "883f6b549d30a35c"
+            ]
+        ]
+    },
+    {
+        "id": "883f6b549d30a35c",
+        "type": "http request",
+        "z": "42637607a25c574a",
+        "name": "send api request to jimi endpoint",
+        "method": "GET",
+        "ret": "obj",
+        "paytoqs": "ignore",
+        "url": "https://hk-open.tracksolidpro.com/route/rest",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "insecureHTTPParser": false,
+        "authType": "",
+        "senderr": false,
+        "headers": [],
+        "x": 530,
+        "y": 1100,
+        "wires": [
+            [
+                "46753aafdaaa031f"
+            ]
+        ]
+    },
+    {
+        "id": "46753aafdaaa031f",
+        "type": "change",
+        "z": "42637607a25c574a",
+        "name": "Global Access Token",
+        "rules": [
+            {
+                "t": "set",
+                "p": "access_token",
+                "pt": "global",
+                "to": "payload.result.accessToken",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 160,
+        "y": 1160,
+        "wires": [
+            [
+                "a640f75ac1ae9e1c"
+            ]
+        ]
+    },
+    {
+        "id": "a640f75ac1ae9e1c",
+        "type": "function",
+        "z": "42637607a25c574a",
+        "name": "create new access token",
+        "func": "node.warn(\"New Access Token is created.\");\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 430,
+        "y": 1160,
+        "wires": [
+            [
+                "994990d68a397214"
+            ]
+        ]
+    },
+    {
+        "id": "994990d68a397214",
+        "type": "debug",
+        "z": "42637607a25c574a",
+        "name": "debug 11",
+        "active": true,
+        "tosidebar": true,
+        "console": true,
+        "tostatus": true,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "payload",
+        "statusType": "auto",
+        "x": 670,
+        "y": 1160,
+        "wires": []
+    },
+    {
+        "id": "0bda96f578307943",
+        "type": "comment",
+        "z": "42637607a25c574a",
+        "name": "Get Devices Data (Daily)",
+        "info": "daily trigger at time 1200\n\ndata get = {\n    imei, \n    deviceName, \n    lat, \n    lng, \n    batteryPowerVal,\n    electQuantity\n}\n \n",
+        "x": 150,
+        "y": 400,
+        "wires": []
+    },
+    {
+        "id": "f24ae61d3b18fbe8",
+        "type": "inject",
+        "z": "42637607a25c574a",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "02 13 * * *",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 130,
+        "y": 120,
+        "wires": [
+            [
+                "06abe1e38f32d40c"
+            ]
+        ]
+    },
+    {
+        "id": "06abe1e38f32d40c",
+        "type": "function",
+        "z": "42637607a25c574a",
+        "name": "Convert DateTime Format",
+        "func": "var date = msg.payload\nvar msiadate = new Date(date)\n\nvar dateonly = msiadate.toISOString().slice(0, 10);\nvar timeonly = msiadate.toISOString().slice(11, 19);\n\nmsg.payload = String(dateonly) + \" \" + String(timeonly)\nnode.status({ text: msg.payload });\n\nreturn msg;\n",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 330,
+        "y": 120,
+        "wires": [
+            [
+                "2d24189c0c7603a5"
+            ]
+        ]
+    },
+    {
+        "id": "2d24189c0c7603a5",
+        "type": "template",
+        "z": "42637607a25c574a",
+        "name": "Get Token Param",
+        "field": "payload",
+        "fieldType": "msg",
+        "format": "json",
+        "syntax": "mustache",
+        "template": "{\n    \"app_key\": \"8FB345B8693CCD00CF8B69A915590CF7\",\n    \"expires_in\":\"7200\",\n    \"format\":\"json\",\n    \"method\": \"jimi.oauth.token.get\",\n    \"sign\":\"null\",\n    \"sign_method\":\"md5\",\n    \"timestamp\": \"{{payload}}\",\n    \"user_id\":\"Macrovention\",\n    \"user_pwd_md5\":\"c5e9b9e61e52bf93ce4355f3b9254d0c\",\n    \"v\": \"1.0\"\n    \n}\n",
+        "output": "json",
+        "x": 570,
+        "y": 120,
+        "wires": [
+            [
+                "f243e6be09196a7d"
+            ]
+        ]
+    },
+    {
+        "id": "d6114b9aa927cdbd",
+        "type": "comment",
+        "z": "42637607a25c574a",
+        "name": "Generate Access Token",
+        "info": "",
+        "x": 140,
+        "y": 60,
+        "wires": []
+    },
+    {
+        "id": "f243e6be09196a7d",
+        "type": "template",
+        "z": "42637607a25c574a",
+        "name": "Create Hashstring",
+        "field": "hashstring",
+        "fieldType": "msg",
+        "format": "handlebars",
+        "syntax": "mustache",
+        "template": "ee7641ab15aa4db28f1a4fde46fe80f1app_key{{payload.app_key}}expires_in{{payload.expires_in}}format{{payload.format}}method{{payload.method}}sign_method{{payload.sign_method}}timestamp{{payload.timestamp}}user_id{{payload.user_id}}user_pwd_md5{{payload.user_pwd_md5}}v{{payload.v}}ee7641ab15aa4db28f1a4fde46fe80f1",
+        "output": "str",
+        "x": 150,
+        "y": 180,
+        "wires": [
+            [
+                "aa9d8b498fac2c5f"
+            ]
+        ]
+    },
+    {
+        "id": "f65cfd9c6a0a646c",
+        "type": "function",
+        "z": "42637607a25c574a",
+        "name": "Merge Func",
+        "func": "var hashed_md5 = msg.md5;\n\nmsg.payload.sign = hashed_md5;\n\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 530,
+        "y": 180,
+        "wires": [
+            [
+                "1bcf04d5242b8f25"
+            ]
+        ]
+    },
+    {
+        "id": "1bcf04d5242b8f25",
+        "type": "http request",
+        "z": "42637607a25c574a",
+        "name": "Send API to Jimi Endpoint",
+        "method": "GET",
+        "ret": "obj",
+        "paytoqs": "query",
+        "url": "https://hk-open.tracksolidpro.com/route/rest",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "insecureHTTPParser": false,
+        "authType": "",
+        "senderr": false,
+        "headers": [],
+        "x": 750,
+        "y": 180,
+        "wires": [
+            [
+                "50c74730fcb32f7b",
+                "3c9f95248ab889ba"
+            ]
+        ]
+    },
+    {
+        "id": "50c74730fcb32f7b",
+        "type": "change",
+        "z": "42637607a25c574a",
+        "name": "Global Access Token",
+        "rules": [
+            {
+                "t": "set",
+                "p": "access_token",
+                "pt": "global",
+                "to": "payload.result.accessToken",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 160,
+        "y": 240,
+        "wires": [
+            [
+                "4281b9adaf94b0e4"
+            ]
+        ]
+    },
+    {
+        "id": "4281b9adaf94b0e4",
+        "type": "function",
+        "z": "42637607a25c574a",
+        "name": "Generate New Access Token",
+        "func": "node.warn(\"New Access Token is created.\");\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 420,
+        "y": 260,
+        "wires": [
+            [
+                "169eb181c43d3173"
+            ]
+        ]
+    },
+    {
+        "id": "169eb181c43d3173",
+        "type": "debug",
+        "z": "42637607a25c574a",
+        "name": "debug 15",
+        "active": true,
+        "tosidebar": true,
+        "console": true,
+        "tostatus": true,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "payload",
+        "statusType": "auto",
+        "x": 630,
+        "y": 260,
+        "wires": []
+    },
+    {
+        "id": "3c9f95248ab889ba",
+        "type": "debug",
+        "z": "42637607a25c574a",
+        "name": "debug 16",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 960,
+        "y": 140,
+        "wires": []
+    },
+    {
+        "id": "47abddb2a0f12e67",
+        "type": "comment",
+        "z": "42637607a25c574a",
+        "name": "TODO: illegal token - try refresh access token",
+        "info": "",
+        "x": 430,
+        "y": 60,
+        "wires": []
+    },
+    {
+        "id": "89fb93e1fb3648c7",
+        "type": "comment",
+        "z": "42637607a25c574a",
+        "name": "TO TEST: global access token",
+        "info": "try inject to Generate Access Token repeatly.\nsee if that able to retrieve without connect with constant switch.",
+        "x": 180,
+        "y": 700,
+        "wires": []
+    },
+    {
+        "id": "ae8517f7e91ebaae",
+        "type": "comment",
+        "z": "42637607a25c574a",
+        "name": "TO TEST",
+        "info": "refer TODO: illegal token",
+        "x": 120,
+        "y": 960,
+        "wires": []
+    },
+    {
+        "id": "d991c9259ade9f69",
+        "type": "function",
+        "z": "42637607a25c574a",
+        "name": "Get Obj",
+        "func": "var results = msg.payload.result;\nvar devicesInfo = [];\nvar toTrackimei = [\"353549092544336\", \"353549092545846\", \"353549092527646\"]\n\nfor (var i = 0; i < results.length; i++) {\n    var device = results[i];\n    if (toTrackimei.includes(device.imei)){\n        var deviceInfo = {};\n        deviceInfo.imei = device.imei;\n        deviceInfo.deviceName = device.deviceName;\n        deviceInfo.lat = device.lat;\n        deviceInfo.lng = device.lng;\n        deviceInfo.batteryPowerVal = device.batteryPowerVal;\n\n        if (device.batteryPowerVal == null) {\n            deviceInfo.electQuantity = 0;\n        } else {\n            var battery = device.batteryPowerVal;\n            var electQuantity;\n\n            if (battery >= 4.08) {\n                electQuantity = 100;\n            } else if (battery >= 4) {\n                electQuantity = 90;\n            } else if (battery >= 3.95) {\n                electQuantity = 80;\n            } else if (battery >= 3.85) {\n                electQuantity = 70;\n            } else if (battery >= 3.8) {\n                electQuantity = 60;\n            } else if (battery >= 3.74) {\n                electQuantity = 50;\n            } else if (battery >= 3.71) {\n                electQuantity = 40;\n            } else if (battery >= 3.68) {\n                electQuantity = 30;\n            } else if (battery >= 3.65) {\n                electQuantity = 20;\n            } else if (battery >= 3.6) {\n                electQuantity = 10;\n            } else if (battery >= 3.55) {\n                electQuantity = 1;\n            } else {\n                electQuantity = 0;\n            }\n            deviceInfo.electQuantity = electQuantity;\n        }\n        devicesInfo.push(deviceInfo);\n    }\n}\n\nmsg.payload = devicesInfo;\nreturn msg;\n",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 980,
+        "y": 520,
+        "wires": [
+            [
+                "669cfa49074ba9ac"
+            ]
+        ]
+    },
+    {
+        "id": "79c0393de5d87607",
+        "type": "switch",
+        "z": "42637607a25c574a",
+        "name": "",
+        "property": "payload.message",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "eq",
+                "v": "success",
+                "vt": "str"
+            },
+            {
+                "t": "neq",
+                "v": "success",
+                "vt": "str"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 2,
+        "x": 790,
+        "y": 520,
+        "wires": [
+            [
+                "d991c9259ade9f69"
+            ],
+            [
+                "3bc161dd81aa7132"
+            ]
+        ]
+    },
+    {
+        "id": "3bc161dd81aa7132",
+        "type": "debug",
+        "z": "42637607a25c574a",
+        "name": "debug 17",
+        "active": true,
+        "tosidebar": true,
+        "console": true,
+        "tostatus": true,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "payload",
+        "statusType": "auto",
+        "x": 930,
+        "y": 600,
+        "wires": []
+    },
+    {
+        "id": "d12879d0071d5598",
+        "type": "debug",
+        "z": "42637607a25c574a",
+        "name": "debug 18",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1440,
+        "y": 520,
+        "wires": []
+    },
+    {
+        "id": "552f7880539df333",
+        "type": "md5",
+        "z": "42637607a25c574a",
+        "name": "MD5 Hashing",
+        "fieldToHash": "hashstring",
+        "fieldTypeToHash": "msg",
+        "hashField": "md5",
+        "hashFieldType": "msg",
+        "x": 200,
+        "y": 520,
+        "wires": [
+            [
+                "331930c40489c7f3"
+            ]
+        ]
+    },
+    {
+        "id": "aa4e3e49626940a1",
+        "type": "md5",
+        "z": "42637607a25c574a",
+        "name": "md5 hashing",
+        "fieldToHash": "payload",
+        "fieldTypeToHash": "msg",
+        "hashField": "md5",
+        "hashFieldType": "msg",
+        "x": 130,
+        "y": 1100,
+        "wires": [
+            [
+                "12318c6714567b37"
+            ]
+        ]
+    },
+    {
+        "id": "aa9d8b498fac2c5f",
+        "type": "md5",
+        "z": "42637607a25c574a",
+        "name": "md5 hashing",
+        "fieldToHash": "hashstring",
+        "fieldTypeToHash": "msg",
+        "hashField": "md5",
+        "hashFieldType": "msg",
+        "x": 350,
+        "y": 180,
+        "wires": [
+            [
+                "f65cfd9c6a0a646c"
+            ]
+        ]
+    },
+    {
+        "id": "d444caf820976289",
+        "type": "template",
+        "z": "42637607a25c574a",
+        "name": "",
+        "field": "payload",
+        "fieldType": "msg",
+        "format": "handlebars",
+        "syntax": "mustache",
+        "template": "INSERT INTO deviceBattery (\n    imei, \n    deviceName, \n    lat, \n    lng, \n    batteryPowerVal,\n    electQuantity\n) VALUES (\n    {{{payload.imei}}},\n    {{{payload.deviceName}}},\n    {{{payload.lat}}},\n    {{{payload.lng}}},\n    {{{payload.batteryPowerVal}}},\n    {{{payload.electQuantity}}},\n);\n",
+        "output": "str",
+        "x": 1280,
+        "y": 520,
+        "wires": [
+            [
+                "d12879d0071d5598"
+            ]
+        ]
+    },
+    {
+        "id": "669cfa49074ba9ac",
+        "type": "split",
+        "z": "42637607a25c574a",
+        "name": "",
+        "splt": "\\n",
+        "spltType": "str",
+        "arraySplt": 1,
+        "arraySpltType": "len",
+        "stream": false,
+        "addname": "",
+        "x": 1130,
+        "y": 520,
+        "wires": [
+            [
+                "d444caf820976289"
+            ]
+        ]
+    },
+    {
+        "id": "ced6926c2551e14b",
+        "type": "inject",
+        "z": "42637607a25c574a",
+        "name": "",
+        "props": [
+            {
+                "p": "timestamp",
+                "v": "",
+                "vt": "date"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            },
+            {
+                "p": "access_token",
+                "v": "access_token",
+                "vt": "global"
+            }
+        ],
+        "repeat": "",
+        "crontab": "49 12 * * *",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "x": 110,
+        "y": 480,
+        "wires": [
+            [
+                "769c8922f5a4466b"
+            ]
+        ]
+    }
+]
