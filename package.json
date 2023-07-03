@@ -2,7 +2,9 @@
     "name": "JimiApiTest",
     "description": "Retrieve AT4 devices detail information",
     "version": "0.0.1",
-    "dependencies": {},
+    "dependencies": {
+        "node-red-contrib-md5": "1.0.4"
+    },
     "node-red": {
         "settings": {
             "flowFile": "flow.json",
