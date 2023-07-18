@@ -16,10 +16,217 @@
         "env": []
     },
     {
+        "id": "1ce13ae61a870490",
+        "type": "tab",
+        "label": "SQLite",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "df2bd990e6ea1514",
+        "type": "sqlitedb",
+        "db": "C:\\users\\admin\\desktop\\share\\testdb.db",
+        "mode": "RWC"
+    },
+    {
+        "id": "b7274071d850ceb3",
+        "type": "ui_tab",
+        "name": "Home",
+        "icon": "dashboard",
+        "disabled": false,
+        "hidden": false
+    },
+    {
+        "id": "504b29c805c1d104",
+        "type": "ui_base",
+        "theme": {
+            "name": "theme-light",
+            "lightTheme": {
+                "default": "#0094CE",
+                "baseColor": "#0094CE",
+                "baseFont": "-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Oxygen-Sans,Ubuntu,Cantarell,Helvetica Neue,sans-serif",
+                "edited": true,
+                "reset": false
+            },
+            "darkTheme": {
+                "default": "#097479",
+                "baseColor": "#097479",
+                "baseFont": "-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Oxygen-Sans,Ubuntu,Cantarell,Helvetica Neue,sans-serif",
+                "edited": false
+            },
+            "customTheme": {
+                "name": "Untitled Theme 1",
+                "default": "#4B7930",
+                "baseColor": "#4B7930",
+                "baseFont": "-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Oxygen-Sans,Ubuntu,Cantarell,Helvetica Neue,sans-serif"
+            },
+            "themeState": {
+                "base-color": {
+                    "default": "#0094CE",
+                    "value": "#0094CE",
+                    "edited": false
+                },
+                "page-titlebar-backgroundColor": {
+                    "value": "#0094CE",
+                    "edited": false
+                },
+                "page-backgroundColor": {
+                    "value": "#fafafa",
+                    "edited": false
+                },
+                "page-sidebar-backgroundColor": {
+                    "value": "#ffffff",
+                    "edited": false
+                },
+                "group-textColor": {
+                    "value": "#1bbfff",
+                    "edited": false
+                },
+                "group-borderColor": {
+                    "value": "#ffffff",
+                    "edited": false
+                },
+                "group-backgroundColor": {
+                    "value": "#ffffff",
+                    "edited": false
+                },
+                "widget-textColor": {
+                    "value": "#111111",
+                    "edited": false
+                },
+                "widget-backgroundColor": {
+                    "value": "#0094ce",
+                    "edited": false
+                },
+                "widget-borderColor": {
+                    "value": "#ffffff",
+                    "edited": false
+                },
+                "base-font": {
+                    "value": "-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Oxygen-Sans,Ubuntu,Cantarell,Helvetica Neue,sans-serif"
+                }
+            },
+            "angularTheme": {
+                "primary": "indigo",
+                "accents": "blue",
+                "warn": "red",
+                "background": "grey",
+                "palette": "light"
+            }
+        },
+        "site": {
+            "name": "Node-RED Dashboard",
+            "hideToolbar": "false",
+            "allowSwipe": "false",
+            "lockMenu": "false",
+            "allowTempTheme": "true",
+            "dateFormat": "DD/MM/YYYY",
+            "sizes": {
+                "sx": 48,
+                "sy": 48,
+                "gx": 6,
+                "gy": 6,
+                "cx": 6,
+                "cy": 6,
+                "px": 0,
+                "py": 0
+            }
+        }
+    },
+    {
+        "id": "9d6fd843262a51e4",
+        "type": "ui_group",
+        "name": "Default",
+        "tab": "b7274071d850ceb3",
+        "order": 1,
+        "disp": true,
+        "width": "6",
+        "collapse": false,
+        "className": ""
+    },
+    {
+        "id": "14dbe35c35cde33a",
+        "type": "inject",
+        "z": "ea2f08adbfccf0be",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 100,
+        "y": 80,
+        "wires": [
+            [
+                "3936b8ef25bbda9d"
+            ]
+        ]
+    },
+    {
+        "id": "12925094a9de03bb",
+        "type": "debug",
+        "z": "ea2f08adbfccf0be",
+        "name": "debug 19",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 760,
+        "y": 140,
+        "wires": []
+    },
+    {
+        "id": "3936b8ef25bbda9d",
+        "type": "function",
+        "z": "ea2f08adbfccf0be",
+        "name": "function 6",
+        "func": "const timestamp = new Date().toLocaleString('en-US', { timeZone: 'Asia/Singapore' });\nconst unixTimestamp = Math.floor(new Date(timestamp).getTime() / 1000); // Divide by 1000 to convert to seconds\n\nmsg.payload.datetime = timestamp;\nmsg.payload.unixtimestamp = unixTimestamp;\nnode.status({ text: msg.payload.datetime });\nreturn msg;\n",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 360,
+        "y": 100,
+        "wires": [
+            [
+                "12925094a9de03bb"
+            ]
+        ]
+    },
+    {
+        "id": "aa30ab1c5e38cc09",
+        "type": "debug",
+        "z": "ea2f08adbfccf0be",
+        "name": "debug 22",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 640,
+        "y": 200,
+        "wires": []
+    },
+    {
         "id": "5ac5e33ce5fac4b0",
         "type": "inject",
         "z": "42637607a25c574a",
-        "name": "",
+        "name": "Inject every 24hrs",
         "props": [
             {
                 "p": "timestamp",
@@ -36,12 +243,12 @@
                 "vt": "global"
             }
         ],
-        "repeat": "",
-        "crontab": "00 12 * * *",
+        "repeat": "86400",
+        "crontab": "",
         "once": false,
         "onceDelay": 0.1,
         "topic": "",
-        "x": 110,
+        "x": 130,
         "y": 440,
         "wires": [
             []
@@ -58,8 +265,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 350,
-        "y": 440,
+        "x": 390,
+        "y": 460,
         "wires": [
             [
                 "38df89a75be45ffa"
@@ -77,8 +284,8 @@
         "syntax": "mustache",
         "template": "{\n    \"method\": \"jimi.user.device.location.list\",\n    \"timestamp\": \"{{payload.timestamp}}\",\n    \"app_key\": \"8FB345B8693CCD00CF8B69A915590CF7\",\n    \"sign\": \"null\",\n    \"sign_method\": \"md5\",\n    \"v\": \"1.0\",\n    \"format\": \"json\",\n    \"access_token\": \"{{access_token}}\",\n    \"target\": \"Macrovention\"\n}",
         "output": "json",
-        "x": 610,
-        "y": 440,
+        "x": 670,
+        "y": 460,
         "wires": [
             [
                 "87f0ea493b3c3363"
@@ -102,7 +309,7 @@
         "senderr": false,
         "headers": [],
         "x": 590,
-        "y": 520,
+        "y": 540,
         "wires": [
             [
                 "79c0393de5d87607"
@@ -121,7 +328,7 @@
         "finalize": "",
         "libs": [],
         "x": 370,
-        "y": 520,
+        "y": 540,
         "wires": [
             [
                 "485e81668bc85070"
@@ -202,7 +409,7 @@
         "syntax": "mustache",
         "template": "ee7641ab15aa4db28f1a4fde46fe80f1access_token{{payload.access_token}}app_key{{payload.app_key}}format{{payload.format}}method{{payload.method}}sign_method{{payload.sign_method}}target{{payload.target}}timestamp{{payload.timestamp}}v{{payload.v}}ee7641ab15aa4db28f1a4fde46fe80f1",
         "output": "str",
-        "x": 850,
+        "x": 930,
         "y": 440,
         "wires": [
             [
@@ -484,13 +691,13 @@
             }
         ],
         "repeat": "",
-        "crontab": "02 13 * * *",
+        "crontab": "",
         "once": false,
         "onceDelay": 0.1,
         "topic": "",
         "payload": "",
         "payloadType": "date",
-        "x": 130,
+        "x": 120,
         "y": 120,
         "wires": [
             [
@@ -513,26 +720,7 @@
         "y": 120,
         "wires": [
             [
-                "2d24189c0c7603a5"
-            ]
-        ]
-    },
-    {
-        "id": "2d24189c0c7603a5",
-        "type": "template",
-        "z": "42637607a25c574a",
-        "name": "Get Token Param",
-        "field": "payload",
-        "fieldType": "msg",
-        "format": "json",
-        "syntax": "mustache",
-        "template": "{\n    \"app_key\": \"8FB345B8693CCD00CF8B69A915590CF7\",\n    \"expires_in\":\"7200\",\n    \"format\":\"json\",\n    \"method\": \"jimi.oauth.token.get\",\n    \"sign\":\"null\",\n    \"sign_method\":\"md5\",\n    \"timestamp\": \"{{payload}}\",\n    \"user_id\":\"Macrovention\",\n    \"user_pwd_md5\":\"c5e9b9e61e52bf93ce4355f3b9254d0c\",\n    \"v\": \"1.0\"\n    \n}\n",
-        "output": "json",
-        "x": 570,
-        "y": 120,
-        "wires": [
-            [
-                "f243e6be09196a7d"
+                "4601dde3e520a4f5"
             ]
         ]
     },
@@ -731,7 +919,7 @@
         "finalize": "",
         "libs": [],
         "x": 980,
-        "y": 520,
+        "y": 540,
         "wires": [
             [
                 "669cfa49074ba9ac"
@@ -760,8 +948,8 @@
         "checkall": "true",
         "repair": false,
         "outputs": 2,
-        "x": 790,
-        "y": 520,
+        "x": 810,
+        "y": 540,
         "wires": [
             [
                 "d991c9259ade9f69"
@@ -801,7 +989,7 @@
         "targetType": "msg",
         "statusVal": "",
         "statusType": "auto",
-        "x": 1440,
+        "x": 1640,
         "y": 520,
         "wires": []
     },
@@ -815,7 +1003,7 @@
         "hashField": "md5",
         "hashFieldType": "msg",
         "x": 200,
-        "y": 520,
+        "y": 540,
         "wires": [
             [
                 "331930c40489c7f3"
@@ -867,12 +1055,10 @@
         "syntax": "mustache",
         "template": "INSERT INTO deviceBattery (\n    imei, \n    deviceName, \n    lat, \n    lng, \n    batteryPowerVal,\n    electQuantity\n) VALUES (\n    {{{payload.imei}}},\n    {{{payload.deviceName}}},\n    {{{payload.lat}}},\n    {{{payload.lng}}},\n    {{{payload.batteryPowerVal}}},\n    {{{payload.electQuantity}}},\n);\n",
         "output": "str",
-        "x": 1280,
-        "y": 520,
+        "x": 1300,
+        "y": 540,
         "wires": [
-            [
-                "d12879d0071d5598"
-            ]
+            []
         ]
     },
     {
@@ -887,10 +1073,10 @@
         "stream": false,
         "addname": "",
         "x": 1130,
-        "y": 520,
+        "y": 540,
         "wires": [
             [
-                "d444caf820976289"
+                "aac968274ee1ece1"
             ]
         ]
     },
@@ -898,7 +1084,7 @@
         "id": "ced6926c2551e14b",
         "type": "inject",
         "z": "42637607a25c574a",
-        "name": "",
+        "name": "NA",
         "props": [
             {
                 "p": "timestamp",
@@ -916,11 +1102,11 @@
             }
         ],
         "repeat": "",
-        "crontab": "49 12 * * *",
+        "crontab": "",
         "once": false,
         "onceDelay": 0.1,
         "topic": "",
-        "x": 110,
+        "x": 90,
         "y": 480,
         "wires": [
             [
@@ -937,5 +1123,164 @@
         "x": 700,
         "y": 60,
         "wires": []
+    },
+    {
+        "id": "4601dde3e520a4f5",
+        "type": "template",
+        "z": "42637607a25c574a",
+        "name": "ATA4 API Common Param",
+        "field": "payload",
+        "fieldType": "msg",
+        "format": "json",
+        "syntax": "mustache",
+        "template": "{\n    \"app_key\": \"8FB345B8693CCD00CF8B69A915590CF7\",\n    \"expires_in\":\"7200\",\n    \"format\":\"json\",\n    \"method\": \"jimi.oauth.token.get\",\n    \"sign\":\"null\",\n    \"sign_method\":\"md5\",\n    \"timestamp\": \"{{payload}}\",\n    \"user_id\":\"Macrovention\",\n    \"user_pwd_md5\":\"c5e9b9e61e52bf93ce4355f3b9254d0c\",\n    \"v\": \"1.0\"\n    \n}\n\n    \n    ",
+        "output": "json",
+        "x": 620,
+        "y": 120,
+        "wires": [
+            [
+                "f243e6be09196a7d"
+            ]
+        ]
+    },
+    {
+        "id": "aac968274ee1ece1",
+        "type": "function",
+        "z": "42637607a25c574a",
+        "name": "Add utc8 datetime into deviceData obj",
+        "func": "const timestamp = new Date().toLocaleString('en-US', { timeZone: 'Asia/Singapore' });\n\nconst options = {\n    timeZone: 'Asia/Singapore',\n    year: 'numeric',\n    month: '2-digit',\n    day: '2-digit',\n    hour: '2-digit',\n    minute: '2-digit',\n    second: '2-digit',\n};\n\nconst utc8Timestamp = new Date(timestamp).toLocaleString('en-US', options);\n\nmsg.payload.datetime = utc8Timestamp;\nnode.status({ text: msg.payload.datetime });\nreturn msg;\n\n\n\n\n\n\n\n\n",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1350,
+        "y": 440,
+        "wires": [
+            [
+                "d12879d0071d5598"
+            ]
+        ]
+    },
+    {
+        "id": "f455dbcccb5d3639",
+        "type": "template",
+        "z": "1ce13ae61a870490",
+        "name": "",
+        "field": "payload",
+        "fieldType": "msg",
+        "format": "handlebars",
+        "syntax": "mustache",
+        "template": "CREATE TABLE deviceData (\n    id INTEGER PRIMARY KEY AUTOINCREMENT,\n    object TEXT,\n    imei TEXT,\n    deviceName TEXT,\n    lat REAL,\n    lng REAL,\n    batteryPowerVal TEXT,\n    deviceBattery INTEGER\n);\n",
+        "output": "str",
+        "x": 280,
+        "y": 140,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "bcec1d4c3dc00935",
+        "type": "inject",
+        "z": "1ce13ae61a870490",
+        "name": "Create Table",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "CREATE TABLE deviceData (id INTEGER PRIMARY KEY AUTOINCREMENT, object TEXT, imei TEXT, deviceName TEXT, lat REAL,lng REAL, batteryPowerVal TEXT,deviceBattery INTEGER)",
+        "payload": "",
+        "payloadType": "date",
+        "x": 110,
+        "y": 240,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "1d1697b1cfda92dd",
+        "type": "debug",
+        "z": "1ce13ae61a870490",
+        "name": "debug 21",
+        "active": true,
+        "tosidebar": true,
+        "console": true,
+        "tostatus": true,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "payload",
+        "statusType": "auto",
+        "x": 490,
+        "y": 240,
+        "wires": []
+    },
+    {
+        "id": "8edb81990c963218",
+        "type": "sqlite",
+        "z": "1ce13ae61a870490",
+        "mydb": "df2bd990e6ea1514",
+        "sqlquery": "fixed",
+        "sql": "SELECT name FROM sqlite_master\nWHERE type='table';",
+        "name": "Database",
+        "x": 280,
+        "y": 300,
+        "wires": [
+            [
+                "1d1697b1cfda92dd"
+            ]
+        ]
+    },
+    {
+        "id": "3a49a77a2bc4c72c",
+        "type": "inject",
+        "z": "1ce13ae61a870490",
+        "name": "Check",
+        "props": [],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "x": 90,
+        "y": 340,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "d0cbbba253eee96f",
+        "type": "inject",
+        "z": "1ce13ae61a870490",
+        "name": "Delete Table",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "DROP TABLE IF EXISTS xxx",
+        "payload": "",
+        "payloadType": "date",
+        "x": 110,
+        "y": 180,
+        "wires": [
+            []
+        ]
     }
 ]
